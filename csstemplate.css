@@ -122,26 +122,3 @@ text-align:right;
 .profil {
 font-size:1.2em;
 }
-
-.nav-tabs a[href*="edit"] {
-    background-color: rgba(115,252,115,0.2);
-}
-
-
-.nav-tabs a[href*="edit"]::before {
-content:"  ▶ ";
-animation: opacity 1s ease-in-out infinite;
-    opacity: 1;  
-}
-
-@keyframes opacity {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 0;
-  }
-}
