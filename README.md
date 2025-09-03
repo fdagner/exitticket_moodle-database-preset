@@ -1,10 +1,9 @@
-# Mind Map
-
-Mind Map is a preset for the Moodle activity database.
+# Exit Ticket
+Exit Ticket is a preset for the Moodle activity database.
 
 ## Description
 
-Users can create a mind map.
+Students can create exit tickets.
 
 ## Getting started
 
@@ -18,4 +17,4 @@ The preset is available in German, but there is not so much to translate. The te
 ## Screenshots
 
 <img width="400" alt="single view" src="/screenshots/listenansicht.png">
-<img width="400" alt="single view" src="/screenshots/einzelansicht.png">
+<img width="400" alt="single view" src="/screenshots/hinzufuegen.png">
