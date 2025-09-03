@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<preset>
+
+<description/>
+
+<settings>
+<intro/>
+<comments>0</comments>
+<requiredentries>0</requiredentries>
+<requiredentriestoview>0</requiredentriestoview>
+<maxentries>0</maxentries>
+<rssarticles>0</rssarticles>
+<approval>0</approval>
+<manageapproved>1</manageapproved>
+<defaultsortdir>0</defaultsortdir>
+<defaultsort>0</defaultsort>
+</settings>
+
+<field>
+<type>textarea</type>
+<name>Ziele</name>
+<description>Formuliere zwei pers&#xF6;nliche Ziele f&#xFC;r die n&#xE4;chste Stunde.</description>
+<required>0</required>
+<param2>60</param2>
+<param3>10</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+<field>
+<type>textarea</type>
+<name>Spickzettel</name>
+<description>Schreibe zur heutigen Unterrichtstunde einen Spickzettel mit maximal 5 Zeilen.</description>
+<required>0</required>
+<param2>60</param2>
+<param3>10</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+<field>
+<type>text</type>
+<name>Fachbegriffe</name>
+<description>Nenne 5 wichtige (Fach-)begriffe aus dem heutigen Unterricht.</description>
+<required>0</required>
+</field>
+
+<field>
+<type>menu</type>
+<name>Feedback1</name>
+<description>Wie war der Unterricht?</description>
+<required>0</required>
+<param1># &#x1F499;&#x1F5A4;
+# &#x1F499;&#x1F499;&#x1F5A4;
+# &#x1F499;&#x1F499;&#x1F499;</param1>
+</field>
+
+<field>
+<type>menu</type>
+<name>Feedback2</name>
+<description>Wie war dein Arbeitsverhalten?</description>
+<required>0</required>
+<param1># &#x1F4AA;
+# &#x1F4AA;&#x1F4AA;
+# &#x1F4AA;&#x1F4AA;&#x1F4AA;</param1>
+</field>
+
+<field>
+<type>menu</type>
+<name>Feedback3</name>
+<description>Hast du das Thema verstanden?</description>
+<required>0</required>
+<param1># &#x1F44E;
+# &#x1F44E;&#x1F44E;
+# &#x1F44E;&#x1F44E;&#x1F44E;
+# &#x1F44D;
+# &#x1F44D;&#x1F44D;
+# &#x1F44D;&#x1F44D;&#x1F44D;</param1>
+</field>
+
+<field>
+<type>textarea</type>
+<name>Gelernt</name>
+<required>0</required>
+<param2>60</param2>
+<param3>15</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+<field>
+<type>textarea</type>
+<name>Gelernt2</name>
+<required>0</required>
+<param2>60</param2>
+<param3>10</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+<field>
+<type>file</type>
+<name>Dateiabgabe</name>
+<description>Individuelle Dateiabgabe. Den Auftrag erh&#xE4;ltst du von deiner Lehrkraft.</description>
+<required>0</required>
+<param3>0</param3>
+</field>
+
+<field>
+<type>textarea</type>
+<name>Textabgabe</name>
+<description>Individuelle Aufgabe, die du von deiner Lehrkraft erh&#xE4;ltst.</description>
+<required>0</required>
+<param2>60</param2>
+<param3>15</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+<field>
+<type>textarea</type>
+<name>Quizfrage</name>
+<description>Formuliere eine Quizfrage.</description>
+<required>0</required>
+<param2>60</param2>
+<param3>15</param3>
+<param4>1</param4>
+<param5>0</param5>
+</field>
+
+</preset>

@@ -1,0 +1,118 @@
+<div class="scroll-wall" style="max-width: 95%">
+<div class="tweet-card" data-entry-id="##id##">
+  <div style="float:right">##actionsmenu##</div>    
+<div class="tweet-header">
+ ##userpicture##
+<div>
+<a href="##userurl##" class="tweet-user">##user##</a>
+<span class="tweet-time">##timeadded##</span>
+<div class="tweet-section emojis">
+<span class="field-content section-emojis" style="font-size: 1.1em;color: #fff;"></span>
+</div>
+</div>
+ </div>
+<hr>
+ <div class="tweet-content" style="min-height: 150px">
+                <div class="tweet-section gelernt">
+                    <strong>Das habe ich heute gelernt:</strong>
+                    <span class="field-content section-gelernt">[[Gelernt]]</span>
+                 </div>
+<div class="tweet-section gelernt">   <span class="field-content section-gelernt">[[Gelernt2]]</span>
+                </div>
+                     <div class="tweet-section spickzettel">
+                    <strong>Mein Spickzettel:</strong>
+                    <span class="field-content section-spickzettel">[[Spickzettel]]</span>
+                </div>
+                <div class="tweet-section fachbegriffe">
+                    <strong>Wichtige Fachbegriffe:</strong><br>
+                    <span class="field-content section-fachbegriffe">[[Fachbegriffe]]</span>
+                </div>
+  <div class="tweet-section aufgabe">
+<strong>Datei:</strong><br>
+ <span class="field-content section-fachbegriffe">[[Dateiabgabe]]</span></div>
+<div class="tweet-section aufgabe">
+<strong>Abgabe:</strong>
+ <span class="field-content section-fachbegriffe">[[Textabgabe]]</span></div>
+  <div class="tweet-section quizfrage">
+                    <strong>Quizfrage:</strong>
+                    <span class="field-content section-spickzettel">[[Quizfrage]]</span>
+  </div>
+
+ <div class="tweet-section ziele">
+                    <strong>Meine Ziele für nächste Stunde:</strong>
+                    <span class="field-content section-spickzettel">[[Ziele]]</span>
+    
+ </div> 
+
+</div>
+                    <div class="tweet-section feedback"><hr>
+                    <strong>Feedback:</strong>
+                    <span class="field-content section-feedback">[[Feedback1]]</span>
+                    <span class="field-content section-feedback">[[Feedback2]]</span>
+                    <span class="field-content section-feedback">[[Feedback3]]</span>
+               
+</div><hr>
+##comments##
+        </div></div>
+   <script>
+  
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.tweet-card').forEach(card => {
+        card.querySelectorAll('.tweet-section').forEach(section => {
+            const fields = section.querySelectorAll('.field-content');
+            let hasContent = false;
+
+            // Prüfen, ob Text in .field-content vorhanden ist
+            fields.forEach(field => {
+                if (field.textContent.trim()) {
+                    hasContent = true;
+                }
+            });
+
+            // Prüfen, ob Medienelemente (img, video, audio, iframe) in der Sektion vorhanden sind
+            const mediaElements = section.querySelectorAll('img, video, audio, iframe');
+            if (mediaElements.length > 0) {
+                hasContent = true;
+            }
+
+            // Sektion ausblenden, wenn weder Text noch Medienelemente vorhanden sind
+            if (!hasContent) {
+                section.classList.add('hidden');
+            }
+        });
+
+        // Karte ausblenden, wenn keine sichtbaren Sektionen vorhanden sind
+        const visibleSections = card.querySelectorAll('.tweet-section:not(.hidden)');
+        if (visibleSections.length === 0) {
+            card.classList.add('hidden');
+        }
+    });
+
+
+
+      // IntersectionObserver für Scroll-Effekt
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Animation mit leichter Verzögerung
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                    entry.target.style.zIndex = 10 + index; // Dynamischer z-index
+                }, index * 100);
+            } else {
+                // Zurücksetzen, wenn außerhalb des Sichtbereichs
+                entry.target.classList.remove('visible');
+                entry.target.style.zIndex = 1; // Zurück auf Basis-z-index
+            }
+        });
+    }, {
+        threshold: 0.2, // Trigger bei 20% Sichtbarkeit
+        rootMargin: '0px 0px -10% 0px' // Puffer für erneutes Auslösen
+    });
+
+    document.querySelectorAll('.tweet-card').forEach(card => {
+        observer.observe(card);
+    });
+ });
+</script>

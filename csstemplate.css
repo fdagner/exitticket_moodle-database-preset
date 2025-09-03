@@ -1,0 +1,228 @@
+.wall {
+background-color: #efefef;
+}
+
+.scroll-wall {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+.tweet-card {
+    background: #ffffff;
+    border: 0px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: -10px; /* Leichte Überlappung für Kartenstapel */
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.5s ease, opacity 0.5s ease; /* Sanfte Animation */
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px); /* Start weiter unten */
+    z-index: 1;
+}
+
+.tweet-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    z-index: 10; /* Höherer z-index für sichtbare Karten */
+}
+
+.tweet-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 15;
+}
+
+.tweet-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tweet-header img {
+    margin-right: 10px;
+    border: 1px solid rgba(29, 161, 242, 0.15);
+}
+
+.tweet-user {
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: #0f1419;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.tweet-user:hover {
+    color: #1da1f2;
+    text-decoration: none;
+}
+
+.tweet-time {
+    color: #5b7083;
+    font-size: 0.85rem;
+    margin-left: 6px;
+}
+
+.tweet-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.tweet-actions:hover {
+    opacity: 1;
+}
+
+.tweet-content {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #0f1419;
+    margin-top: 8px;
+}
+
+.tweet-section {
+    margin-bottom: 8px;
+    padding: 4px 0;
+}
+
+.tweet-section strong {
+    color: #1da1f2;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+<style>
+* Container für das Accordion */
+#accordionEx.accordion {
+    max-width: 800px; /* Begrenzte Breite für Fokus */
+    margin: 0 auto;
+    border: none;
+}
+
+/* Accordion-Item */
+#accordionEx .accordion-item {
+    background-color: #fff; /* Reines Weiß für Karten-Optik */
+    border: 0px solid #e0e0e0; /* Subtiler Outline-Rahmen */
+    margin-bottom: 12px; /* Abstand zwischen Items */
+    border-radius: 4px; /* Leicht abgerundete Ecken */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sehr subtiler Schatten */
+    transition: box-shadow 0.3s ease; /* Sanfte Animation für Interaktion */
+}
+
+/* Accordion-Header */
+#accordionEx .accordion-header {
+    padding: 0;
+}
+
+/* Accordion-Button */
+#accordionEx .accordion-button {
+    background-color: transparent; /* Kein Hintergrund für Minimalismus */
+    border: none;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 500; /* Medium für klare Lesbarkeit */
+    color: #333;
+    text-align: left;
+    transition: all 0.3s ease;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Farben für die verschiedenen Alert-Klassen */
+#accordionEx .accordion-button.alert-info {
+    background-color: #e6f0fa;
+    border-left: 4px solid #007bff; 
+}
+#accordionEx .accordion-button.alert-success {
+    background-color: #e8f5e9;
+    border-left: 4px solid #28a745;
+}
+#accordionEx .accordion-button.alert-dark {
+    background-color: #f1f1f1;
+    border-left: 4px solid #343a40;
+}
+#accordionEx .accordion-button.alert-warning {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+}
+#accordionEx .accordion-button.alert-danger {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+}
+#accordionEx .accordion-button.alert-primary {
+    background-color: #d6e4ff; 
+    border-left: 4px solid #6610f2;
+}
+
+#accordionEx .accordion-button.alert-light{
+    border-left: 4px solid #ccc;
+}
+
+/* Hover-Effekt für Buttons */
+#accordionEx .accordion-button:hover {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Offener Zustand */
+#accordionEx .accordion-button:not(.collapsed) {
+  color: #000;
+}
+
+/* Entfernen des Standard-Fokus-Rahmens */
+#accordionEx .accordion-button:focus {
+    box-shadow: none;
+}
+
+/* Accordion-Body */
+#accordionEx .accordion-body {
+    padding: 20px;
+    background-color: #fff;
+    border-top: 0px solid #e0e0e0;
+}
+
+/* Textstile */
+#accordionEx .accordion-body p {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    color: #444;
+}
+
+/* Platzhalter für Eingabefelder */
+#accordionEx .accordion-body textarea,
+#accordionEx .accordion-body input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+#accordionEx .accordion-body textarea:focus,
+#accordionEx .accordion-body input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Emojis in Rückmeldung */
+#accordionEx .accordion-body [data-emoji] {
+    font-size: 1.5rem;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#accordionEx .accordion-body [data-emoji]:hover {
+    transform: scale(1.2); /* Subtiler Hover-Effekt */
+}
+
