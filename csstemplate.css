@@ -1,124 +1,359 @@
-.card-bodyx {
-    flex: 1 1 auto;
-    min-height: 1px;
-    padding: 1.25rem;
-    border-left: dashed 10px #999;
-    box-shadow: 5px 3px 8px 1px #969696;
-    max-width: 900px;
-    margin-bottom: 15px;
-    border-radius: 10px;
+/* ================================================================
+   EXIT TICKET – Design System
+   ================================================================ */
+
+/* ── Basis ── */
+.et-grid-wrapper {
+  padding: 20px 4px;
+  font-family: inherit;
 }
 
-.ticket {
-    max-width: 900px;
-    font-size:1.2em;
-    box-shadow: 5px 3px 8px 1px #969696;
-    padding: 15px 4px 1px 15px;    
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border-left: dashed 10px #999999;
+/* ── Datumstrenner ── */
+.et-date-group { margin-bottom: 32px; }
+.et-date-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.et-date-divider-line { flex: 1; height: 1px; background: #e2e0f0; }
+.et-date-divider-label {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #7c6fcd;
+  white-space: nowrap;
+  background: #f0eeff;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #d4caff;
 }
 
-.box h3 {
-display:none;
+/* ── Flex-Grid ── */
+.et-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-
-.dinge:not(:empty)::before {
-content: "3 Dinge die ich heute gelernt habe";
-color: #45C500;
-padding:2px;
+/* ── Kachel ── */
+.et-card {
+  width: 300px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.05);
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ece9f8;
+}
+.et-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(99,74,213,.14);
 }
 
-.dingezwei:not(:empty)::before {
-content: "2 Dinge die ich heute interessant fand";
-color:  #45C500;
-padding:2px;
+/* ── Kachel-Kopf ── */
+.et-card-head {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  padding: 13px 14px;
+  border-radius: 13px 13px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.et-card-head img {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.et-card-head-info { flex: 1; min-width: 0; }
+.et-card-name {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.et-card-time { font-size: .68rem; color: rgba(255,255,255,.7); margin-top: 1px; }
+.et-card-head-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity .15s;
+}
+.et-card-head-actions:hover { opacity: 1; }
+
+/* ── Kachel-Body ── */
+.et-card-body {
+  padding: 12px 14px;
+  flex: 1;
+}
+.et-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-.frage:not(:empty)::before {
-content: "Eine Frage habe ich noch:";
-color: #45C500;
-padding:2px;
+/* ── Tags – passend zum Accordion ── */
+.et-tag {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.et-tag--info    { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; } /* Heute gelernt */
+.et-tag--dark    { background: #f1f5f9; color: #334155; border-color: #94a3b8; } /* Spickzettel   */
+.et-tag--warning { background: #fef3c7; color: #92400e; border-color: #fcd34d; } /* Fachbegriffe  */
+.et-tag--danger  { background: #ffe4e6; color: #be123c; border-color: #fda4af; } /* Aufgabe/Datei */
+.et-tag--light   { background: #f8fafc; color: #475569; border-color: #cbd5e1; } /* Quizfrage     */
+.et-tag--success { background: #d1fae5; color: #065f46; border-color: #6ee7b7; } /* Ziele         */
+.et-tag--primary { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; } /* Rückmeldung   */
+
+/* ── Feedback-Zeile ── */
+.et-card-fb-row {
+  padding: 8px 14px;
+  border-top: 1px solid #f0edf8;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  line-height: 1.6;
 }
 
-.dreieins {
-margin: 0 auto;
-margin-bottom:15px;
+/* ── Kommentar-Badge ── */
+.et-card-comment-row {
+  padding: 6px 14px 10px;
+  border-top: 1px solid #f0edf8;
+}
+.et-comment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .73rem;
+  color: #7c6fcd;
+  background: #f0eeff;
+  border: 1px solid #d4caff;
+  border-radius: 999px;
+  padding: 2px 10px 2px 7px;
+}
+.et-comment-icon { font-size: .85rem; }
+
+/* ── Aktionszeile ── */
+.et-card-actions {
+  padding: 8px 14px;
+  border-top: 1px solid #f0edf8;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.et-card-actions:empty { display: none; }
+.et-card-comments:empty { display: none; }
+
+/* ── Bootstrap-Modal Overrides ── */
+.et-bs-modal {
+  border-radius: 16px;
+  border: none;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 24px 80px rgba(79,70,229,.18);
+}
+#et-modals .modal-dialog {
+  max-height: none;
+}
+.et-bs-modal .modal-header.et-modal-head {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  padding: 16px 20px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: none;
+}
+.et-modal-avatar {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.et-modal-head-info { flex: 1; }
+.et-modal-name { font-size: .95rem; font-weight: 700; color: #fff; }
+.et-modal-time { font-size: .73rem; color: rgba(255,255,255,.7); margin-top: 2px; }
+.et-bs-modal .modal-body.et-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #faf9ff;
+}
+.et-modal-comments-footer {
+  display: block;
+  padding: 16px 24px;
+  border-top: 1px solid #ece9f8;
+  background: #faf9ff;
+}
+.et-modal-comments-footer:empty { display: none; }
+
+/* ── Aktionen im Modal-Header ── */
+.et-modal-actions {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+.et-modal-actions .action-icon {
+  color: rgba(255,255,255,.75) !important;
+}
+.et-modal-actions .action-icon:hover {
+  color: #fff !important;
 }
 
-.spickzettel:not(:empty)::before {
-content: "Mein Spickzettel";
-color: #848484;
-padding:2px;
+/* ── Gemeinsame Inhaltsblöcke ── */
+.et-section { display: none; }
+.et-section.has-content {
+  display: block;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid #ece9f8;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.et-section-label {
+  font-size: .63rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #7c6fcd;
+  margin-bottom: 5px;
+}
+.et-section-content {
+  font-size: .88rem;
+  line-height: 1.6;
+  color: #374151;
+}
+.et-feedback-row { display: flex; gap: 20px; flex-wrap: wrap; }
+.et-feedback-item { display: flex; flex-direction: column; gap: 4px; }
+.et-feedback-emoji { font-size: 1.5rem; }
+
+/* ── Einzelansicht ── */
+.et-single-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 8px;
+  font-family: inherit;
+}
+.et-single-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(79,70,229,.09);
+  border: 1px solid #ece9f8;
+}
+.et-single-head {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  padding: 20px 24px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.et-single-head img {
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.et-single-head-info { flex: 1; }
+.et-single-name { font-size: 1.05rem; font-weight: 700; color: #fff; }
+.et-single-name a { color: #fff; text-decoration: none; }
+.et-single-name a:hover { text-decoration: underline; }
+.et-single-time { font-size: .75rem; color: rgba(255,255,255,.7); margin-top: 3px; }
+.et-single-head-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+  transition: opacity .15s;
+}
+.et-single-head-actions:hover { opacity: 1; }
+.et-single-body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #faf9ff;
+}
+.et-single-comments {
+  padding: 16px 24px;
+  border-top: 1px solid #ece9f8;
+  background: #fff;
+  border-radius: 0 0 16px 16px;
+}
+.et-single-feedback-big .et-feedback-emoji { font-size: 2rem; }
+
+/* et-comments-live: siehe Ende der Datei */
+
+/* ── Versteckte Rohdaten (KRITISCH – fehlt = Feed sichtbar) ── */
+.et-data          { display: none !important; }
+.et-data *        { display: none !important; }
+.et-comments-live { opacity: 0; pointer-events: none; height: 0; overflow: hidden; }
+
+.et-modal-comments-footer .et-comments-live,
+.modal-footer .et-comments-live {
+  opacity: 1;
+  pointer-events: auto;
+  height: auto;
+  overflow: visible;
 }
 
-.spickzettel {
-margin: 0 auto;
-margin-bottom:15px;
-}
+/* ================================================================
+   ACCORDION – Farben passend zu Tags und Design
+   ================================================================ */
+.accordion-button.alert { font-weight: 600; border-radius: 6px !important; }
 
-.fachbegriffe:not(:empty)::before {
-content: "Wichtige Begriffe: ";
-color: #ff7b11;
-padding:2px;
-}
+.accordion-button.alert-info    { background: #dbeafe !important; color: #1d4ed8 !important; border-color: #93c5fd !important; }
+.accordion-button.alert-dark    { background: #f1f5f9 !important; color: #334155 !important; border-color: #94a3b8 !important; }
+.accordion-button.alert-warning { background: #fef3c7 !important; color: #92400e !important; border-color: #fcd34d !important; }
+.accordion-button.alert-danger  { background: #ffe4e6 !important; color: #be123c !important; border-color: #fda4af !important; }
+.accordion-button.alert-light   { background: #f8fafc !important; color: #475569 !important; border-color: #cbd5e1 !important; }
+.accordion-button.alert-success { background: #d1fae5 !important; color: #065f46 !important; border-color: #6ee7b7 !important; }
+.accordion-button.alert-primary { background: #ede9fe !important; color: #5b21b6 !important; border-color: #c4b5fd !important; }
 
-.fachbegriffe {
-margin: 0 auto;
-margin-bottom:15px;
-}
+/* Pfeil-Icon Farbe anpassen */
+.accordion-button.alert-info::after    { filter: invert(22%) sepia(96%) saturate(1200%) hue-rotate(210deg); }
+.accordion-button.alert-dark::after    { filter: invert(22%) sepia(10%) saturate(500%) hue-rotate(190deg); }
+.accordion-button.alert-warning::after { filter: invert(28%) sepia(60%) saturate(800%) hue-rotate(20deg); }
+.accordion-button.alert-danger::after  { filter: invert(18%) sepia(80%) saturate(1200%) hue-rotate(330deg); }
+.accordion-button.alert-light::after   { filter: invert(35%) sepia(10%) saturate(400%) hue-rotate(190deg); }
+.accordion-button.alert-success::after { filter: invert(22%) sepia(60%) saturate(600%) hue-rotate(140deg); }
+.accordion-button.alert-primary::after { filter: invert(18%) sepia(80%) saturate(800%) hue-rotate(260deg); }
 
-.emoji1:not(:empty)::before {
-content: "So habe ich mich heute gefühlt: ";
-color: #c50056;
-padding:2px;
-}
+/* Aufgeklappt: etwas dunkler */
+.accordion-button.alert-info:not(.collapsed)    { background: #bfdbfe !important; }
+.accordion-button.alert-dark:not(.collapsed)    { background: #e2e8f0 !important; }
+.accordion-button.alert-warning:not(.collapsed) { background: #fde68a !important; }
+.accordion-button.alert-danger:not(.collapsed)  { background: #fecdd3 !important; }
+.accordion-button.alert-light:not(.collapsed)   { background: #f1f5f9 !important; }
+.accordion-button.alert-success:not(.collapsed) { background: #a7f3d0 !important; }
+.accordion-button.alert-primary:not(.collapsed) { background: #ddd6fe !important; }
 
-.emojis {
-margin: 0 auto;
-margin-bottom:15px;
-}
-
-.feedbackeins:not(:empty)::before {
-content: "So fand ich den heutigen Unterricht: ";
-color: #0096f6;
-padding:2px;
-}
-
-.feedbackzwei:not(:empty)::before {
-content: "Mein heutiges Arbeitsverhalten: ";
-color: #0096f6;
-padding:2px;
-}
-
-.feedbackdrei:not(:empty)::before {
-content: "So gut habe ich das Thema verstanden: ";
-color: #0096f6;
-padding:2px;
-}
-
-.feedbackvier:not(:empty)::before {
-content: "Das hat mich geärgert: ";
-color: #0096f6;
-padding:2px;
-}
-
-.feedbackfuenf:not(:empty)::before {
-content: "Das hat mich gefreut: ";
-color: #0096f6;
-padding:2px;
-}
-
-.feedback {
-margin: 0 auto;
-margin-bottom:15px;
-}
-
-.edit {
-text-align:right;
-}
-
-.profil {
-font-size:1.2em;
-}
+/* Box-shadow beim Fokus in Farbe des Feldes */
+.accordion-button.alert-info:focus    { box-shadow: 0 0 0 .2rem rgba(59,130,246,.3) !important; }
+.accordion-button.alert-warning:focus { box-shadow: 0 0 0 .2rem rgba(245,158,11,.3) !important; }
+.accordion-button.alert-danger:focus  { box-shadow: 0 0 0 .2rem rgba(244,63,94,.3)  !important; }
+.accordion-button.alert-success:focus { box-shadow: 0 0 0 .2rem rgba(16,185,129,.3) !important; }
+.accordion-button.alert-primary:focus { box-shadow: 0 0 0 .2rem rgba(139,92,246,.3) !important; }

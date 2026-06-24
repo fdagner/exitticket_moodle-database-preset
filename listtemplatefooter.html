@@ -1,1 +1,275 @@
-</tbody></table>
+</div><!-- #et-grid -->
+</div><!-- .et-grid-wrapper -->
+
+<script>
+(function(){
+
+function txt(el, sel){
+  var s = el.querySelector(sel);
+  return s ? s.textContent.trim() : '';
+}
+function raw(el, sel){
+  var s = el.querySelector(sel);
+  return s ? s.innerHTML.trim() : '';
+}
+function hasContent(el, sel){
+  return txt(el, sel).length > 0;
+}
+function cleanFb(el, sel){
+  return txt(el, sel).replace(/^#\s*/, '').trim();
+}
+function extractDate(el){
+  var s = el.querySelector('.et-f-time');
+  if(!s) return 'Unbekannt';
+  return s.textContent.trim().split(',')[0].trim();
+}
+function extractImg(el){
+  var s = el.querySelector('.et-f-img img');
+  return s ? {src: s.src, alt: s.alt||''} : {src:'', alt:''};
+}
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ================================================================
+   KONFIGURATION – Kachelvorschau
+   ================================================================
+   Hier steuern, was als farbiger Tag in der Kachel erscheint.
+
+   sel:     CSS-Selektor des Feldes (et-f-[feldname] aus listtemplate.html)
+   label:   Beschriftung des Tags (leer = kein Tag, Feld aber weiter für
+            Modal-Inhalt verfügbar)
+   cls:     Farbe des Tags – verfügbare Werte:
+              et-tag--info      hellblau   (Heute gelernt)
+              et-tag--dark      grau       (Spickzettel)
+              et-tag--warning   gelb       (Fachbegriffe)
+              et-tag--danger    rot        (Aufgabe/Datei)
+              et-tag--light     hellgrau   (Quizfrage)
+              et-tag--success   grün       (Ziele)
+              et-tag--primary   blau       (Rückmeldung)
+   show:    true  = Tag erscheint in Kachel wenn Feld ausgefüllt
+            false = Feld wird nicht als Tag angezeigt (aber im Modal)
+   ================================================================ */
+var FIELDS = [
+  { sel: '.et-f-gelernt',     label: 'Heute gelernt', cls: 'et-tag--info',    show: true  },
+  { sel: '.et-f-gelernt2',    label: '',               cls: 'et-tag--info',    show: false },
+  { sel: '.et-f-spickzettel', label: 'Spickzettel',    cls: 'et-tag--dark',    show: true  },
+  { sel: '.et-f-fachbegriffe',label: 'Fachbegriffe',   cls: 'et-tag--warning', show: true  },
+  { sel: '.et-f-textabgabe',  label: 'Aufgabe',        cls: 'et-tag--danger',  show: true  },
+  { sel: '.et-f-dateiabgabe', label: 'Datei',          cls: 'et-tag--danger',  show: true  },
+  { sel: '.et-f-quizfrage',   label: 'Quizfrage',      cls: 'et-tag--light',   show: true  },
+  { sel: '.et-f-ziele',       label: 'Ziele',          cls: 'et-tag--success', show: true  },
+];
+
+/* ================================================================
+   KONFIGURATION – Feedback-Felder
+   sel:   Selektor (et-f-fb1 / et-f-fb2 / et-f-fb3)
+   label: Beschriftung im Modal (leer = kein Label)
+   show:  true = im Modal anzeigen, false = komplett ausblenden
+   ================================================================ */
+var FEEDBACK = [
+  { sel: '.et-f-fb1', label: 'Unterricht',      show: true},
+  { sel: '.et-f-fb2', label: 'Arbeitsverhalten', show: false },
+  { sel: '.et-f-fb3', label: 'Verstanden?',      show: false },
+];
+
+/* ================================================================
+   KONFIGURATION – Feedback in Kachel anzeigen?
+   true  = Feedback-Emojis erscheinen unter den Tags
+   false = nur im Modal sichtbar
+   ================================================================ */
+var SHOW_FEEDBACK_IN_CARD = true;
+
+/* ================================================================
+   KONFIGURATION – Kommentar-Badge in Kachel anzeigen?
+   true  = 💬-Icon mit Anzahl erscheint in der Kachel
+   false = kein Badge
+   ================================================================ */
+var SHOW_COMMENT_BADGE = true;
+
+var entries = document.querySelectorAll('.et-data');
+var grid    = document.getElementById('et-grid');
+var groups  = {}, order = [];
+
+entries.forEach(function(el){
+  var dateKey = extractDate(el);
+  if(!groups[dateKey]){ groups[dateKey]=[]; order.push(dateKey); }
+  groups[dateKey].push(el);
+});
+
+var modalContainer = document.createElement('div');
+modalContainer.id = 'et-modals';
+document.body.appendChild(modalContainer);
+
+order.forEach(function(dateKey){
+  var group = document.createElement('div');
+  group.className = 'et-date-group';
+
+  var divider = document.createElement('div');
+  divider.className = 'et-date-divider';
+  divider.innerHTML =
+    '<div class="et-date-divider-line"></div>' +
+    '<div class="et-date-divider-label">'+esc(dateKey)+'</div>' +
+    '<div class="et-date-divider-line"></div>';
+  group.appendChild(divider);
+
+  var groupGrid = document.createElement('div');
+  groupGrid.className = 'et-grid';
+  group.appendChild(groupGrid);
+
+  groups[dateKey].forEach(function(el, idx){
+    var img     = extractImg(el);
+    var name    = txt(el, '.et-f-name');
+    var time    = txt(el, '.et-f-time');
+    var actHTML = raw(el, '.et-f-actions');
+    var fbValues = FEEDBACK.map(function(f){
+      return f.show ? cleanFb(el, f.sel) : '';
+    });
+    var fb1 = fbValues[0]||'', fb2 = fbValues[1]||'', fb3 = fbValues[2]||'';
+    var fbAll = fbValues.filter(Boolean).join(' ');
+
+    /* Kommentar-Widget: nächstes Geschwister nach .et-data */
+    var commentsLive = el.nextElementSibling;
+    var hasComments  = commentsLive && commentsLive.classList.contains('et-comments-live');
+
+    /* Kommentar-Anzahl aus Widget-Text extrahieren z.B. "Kommentare (2)" */
+    var commentBadge = '';
+    if(hasComments){
+      var countMatch = commentsLive.textContent.match(/\((\d+)\)/);
+      var countNum   = countMatch ? parseInt(countMatch[1], 10) : 0;
+      commentBadge =
+        '<div class="et-comment-badge">' +
+          '<span class="et-comment-icon">💬</span>' +
+          '<span class="et-comment-count">'+countNum+'</span>' +
+        '</div>';
+    }
+
+    /* eindeutige Modal-ID */
+    var modalId = 'et-modal-' + dateKey.replace(/[^a-z0-9]/gi,'') + '-' + idx;
+
+    /* Tag-Pills (nur Felder mit show:true) */
+    var tagsHTML = '';
+    FIELDS.forEach(function(f){
+      if(f.show && f.label && hasContent(el, f.sel)){
+        tagsHTML += '<span class="et-tag '+f.cls+'">'+f.label+'</span>';
+      }
+    });
+    if(!tagsHTML){
+      tagsHTML = '<span style="color:#a09ec0;font-style:italic;font-size:.78rem">Keine Felder ausgefüllt</span>';
+    }
+
+    /* ── Kachel ── */
+    var card = document.createElement('div');
+    card.className = 'et-card';
+    card.setAttribute('data-bs-toggle', 'modal');
+    card.setAttribute('data-bs-target', '#'+modalId);
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.innerHTML =
+      '<div class="et-card-head">' +
+        (img.src ? '<img src="'+esc(img.src)+'" alt="'+esc(img.alt)+'">' : '') +
+        '<div class="et-card-head-info">' +
+          '<div class="et-card-name">'+esc(name)+'</div>' +
+          '<div class="et-card-time">'+esc(time)+'</div>' +
+        '</div>' +
+
+      '</div>' +
+      '<div class="et-card-body"><div class="et-tag-row">'+tagsHTML+'</div></div>' +
+      (SHOW_FEEDBACK_IN_CARD && fbAll ? '<div class="et-card-fb-row">'+fbAll+'</div>' : '') +
+      (SHOW_COMMENT_BADGE && commentBadge ? '<div class="et-card-comment-row">'+commentBadge+'</div>' : '');
+
+    groupGrid.appendChild(card);
+
+    /* ── Bootstrap-Modal ── */
+    var modalSections = '';
+
+    function sec(label, content){
+      var cleaned = content.replace(/<[^>]*>/g,'').trim();
+      if(!cleaned) return '';
+      return '<div class="et-section has-content">' +
+        (label ? '<div class="et-section-label">'+label+'</div>' : '') +
+        '<div class="et-section-content">'+content+'</div>' +
+      '</div>';
+    }
+
+    var g1 = raw(el,'.et-f-gelernt'), g2 = raw(el,'.et-f-gelernt2');
+    var gelernt = [g1,g2].filter(function(s){ return s.replace(/<[^>]*>/g,'').trim(); }).join('');
+    if(gelernt) modalSections += sec('Heute gelernt', gelernt);
+
+    [
+      ['.et-f-spickzettel', 'Spickzettel'],
+      ['.et-f-fachbegriffe','Fachbegriffe'],
+      ['.et-f-ziele',       'Ziele'],
+      ['.et-f-quizfrage',   'Quizfrage'],
+      ['.et-f-textabgabe',  'Aufgabe'],
+      ['.et-f-dateiabgabe', 'Dateiabgabe'],
+    ].forEach(function(f){
+      modalSections += sec(f[1], raw(el, f[0]));
+    });
+
+    var fbItems = FEEDBACK.map(function(f, i){
+      var val = fbValues[i];
+      if(!f.show || !val) return '';
+      return '<div class="et-feedback-item">' +
+        (f.label ? '<div class="et-section-label">'+f.label+'</div>' : '') +
+        '<div class="et-feedback-emoji">'+val+'</div>' +
+      '</div>';
+    }).join('');
+    if(fbItems){
+      modalSections +=
+        '<div class="et-section has-content"><div class="et-section-label">Rückmeldung</div>' +
+        '<div class="et-feedback-row">'+fbItems+'</div></div>';
+    }
+
+    var modalEl = document.createElement('div');
+    modalEl.className = 'modal fade';
+    modalEl.id = modalId;
+    modalEl.setAttribute('tabindex', '-1');
+    modalEl.setAttribute('aria-labelledby', modalId+'-label');
+    modalEl.setAttribute('aria-hidden', 'true');
+    modalEl.innerHTML =
+      '<div class="modal-dialog modal-lg">' +
+        '<div class="modal-content et-bs-modal">' +
+          '<div class="modal-header et-modal-head">' +
+            (img.src ? '<img src="'+esc(img.src)+'" alt="'+esc(img.alt)+'" class="et-modal-avatar">' : '') +
+            '<div class="et-modal-head-info">' +
+              '<div class="et-modal-name" id="'+modalId+'-label">'+esc(name)+'</div>' +
+              '<div class="et-modal-time">'+esc(time)+'</div>' +
+            '</div>' +
+            '<div class="et-modal-actions ms-auto">'+actHTML+'</div>' +
+            '<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Schließen"></button>' +
+          '</div>' +
+          '<div class="modal-body et-modal-body">' +
+            (modalSections || '<p style="color:#a09ec0;font-style:italic">Kein Inhalt.</p>') +
+          '</div>' +
+          (hasComments
+            ? '<div class="modal-footer et-modal-comments-footer" id="et-comments-slot-'+modalId+'"></div>'
+            : '') +
+        '</div>' +
+      '</div>';
+
+    modalContainer.appendChild(modalEl);
+
+    /* Kommentar-Widget sofort in Modal-Footer verschieben (beim Seitenaufbau) */
+    if(hasComments){
+      var slot = document.getElementById('et-comments-slot-'+modalId);
+      if(slot) slot.appendChild(commentsLive);
+    }
+
+    /* Anzahl aus Modal-Footer auslesen und Badge aktualisieren */
+    if(hasComments){
+      var badgeCount = card.querySelector('.et-comment-count');
+      if(badgeCount){
+        var slot2 = document.getElementById('et-comments-slot-'+modalId);
+        var countMatch = slot2 ? slot2.textContent.match(/\((\d+)\)/) : null;
+        badgeCount.textContent = countMatch ? countMatch[1] : '0';
+      }
+    }
+
+  });
+
+  grid.appendChild(group);
+});
+
+})();
+</script>

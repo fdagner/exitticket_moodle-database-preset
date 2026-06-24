@@ -1,11 +1,132 @@
-<div class="ticket"><p class="profil">##userpicture## ##user##</p><hr>
-<div class="dreieins"><div class="dinge">[[3 Dinge]]</div><div class="dingezwei">[[2 Dinge]]</div><div class="frage">[[Eine Frage]]</div></div>
+<div class="et-single-wrapper">
+  <div class="et-single-card">
 
-<div class="spickzettel">[[Spickzettel]]</div>
+    <!-- Kopf -->
+    <div class="et-single-head">
+      ##userpicture##
+      <div class="et-single-head-info">
+        <div class="et-single-name">##user##</div>
+        <div class="et-single-time">##timeadded##</div>
+      </div>
+      <div class="et-single-head-actions">##actionsmenu##</div>
 
-<div class="fachbegriffe">[[Fachbegriffe]]</div>
+    </div>
 
-<div class="emojis"><div class="emoji1">[[Emojis2]]</div><div ="emoji2">[[Emojis]]</div></div>
+    <!-- Inhalt -->
+    <div class="et-single-body" id="et-single-body-##id##">
 
-<div class="feedback"><div class="feedbackeins">[[Feedback1]]</div><div class="feedbackzwei">[[Feedback2]]</div><div class="feedbackdrei">[[Feedback3]]</div><div class="feedbackvier">[[Feedback4]]</div><div class="feedbackfuenf">[[Feedback5]]</div></div><hr>
-<p class="edit">##timeadded## ##edit####delete####disapprove####approve##</p></div>
+      <div class="et-section" id="et-s-gelernt-##id##">
+        <div class="et-section-label">Das habe ich heute gelernt</div>
+        <div class="et-section-content">[[Gelernt]][[Gelernt2]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-spickzettel-##id##">
+        <div class="et-section-label">Mein Spickzettel</div>
+        <div class="et-section-content">[[Spickzettel]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-fachbegriffe-##id##">
+        <div class="et-section-label">Wichtige Fachbegriffe</div>
+        <div class="et-section-content">[[Fachbegriffe]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-ziele-##id##">
+        <div class="et-section-label">Meine Ziele für nächste Stunde</div>
+        <div class="et-section-content">[[Ziele]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-quizfrage-##id##">
+        <div class="et-section-label">Quizfrage</div>
+        <div class="et-section-content">[[Quizfrage]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-textabgabe-##id##">
+        <div class="et-section-label">Textabgabe</div>
+        <div class="et-section-content">[[Textabgabe]]</div>
+      </div>
+
+      <div class="et-section" id="et-s-dateiabgabe-##id##">
+        <div class="et-section-label">Dateiabgabe</div>
+        <div class="et-section-content">[[Dateiabgabe]]</div>
+      </div>
+
+      <div class="et-section et-single-feedback-big" id="et-s-feedback-##id##">
+        <div class="et-section-label">Feedback</div>
+        <div class="et-feedback-row">
+          <div class="et-feedback-item" id="et-fb1-##id##">
+            <div class="et-section-label">Unterricht</div>
+            <div class="et-feedback-emoji">[[Feedback1]]</div>
+          </div>
+          <div class="et-feedback-item" id="et-fb2-##id##">
+            <div class="et-section-label">Arbeitsverhalten</div>
+            <div class="et-feedback-emoji">[[Feedback2]]</div>
+          </div>
+          <div class="et-feedback-item" id="et-fb3-##id##">
+            <div class="et-section-label">Verstanden?</div>
+            <div class="et-feedback-emoji">[[Feedback3]]</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .et-single-body -->
+
+    <!-- Kommentare -->
+    <div class="et-single-comments">
+      ##comments##
+    </div>
+
+  </div><!-- .et-single-card -->
+</div><!-- .et-single-wrapper -->
+
+<script>
+(function(){
+  function cleanFb(el){
+    return el ? el.textContent.replace(/^#\s*/,'').trim() : '';
+  }
+  function hasText(el){
+    return el ? el.textContent.replace(/<[^>]*>/g,'').trim().length > 0 : false;
+  }
+
+  /* Alle Sections prüfen und ggf. ausblenden */
+  var sections = [
+    'et-s-gelernt-##id##',
+    'et-s-spickzettel-##id##',
+    'et-s-fachbegriffe-##id##',
+    'et-s-ziele-##id##',
+    'et-s-quizfrage-##id##',
+    'et-s-textabgabe-##id##',
+    'et-s-dateiabgabe-##id##',
+  ];
+
+  sections.forEach(function(id){
+    var sec = document.getElementById(id);
+    if(!sec) return;
+    var content = sec.querySelector('.et-section-content');
+    if(content && content.textContent.trim().length > 0){
+      sec.classList.add('has-content');
+    }
+  });
+
+  /* Feedback: # entfernen, leere Items ausblenden */
+  var fbSec = document.getElementById('et-s-feedback-##id##');
+  var fb1el = document.getElementById('et-fb1-##id##');
+  var fb2el = document.getElementById('et-fb2-##id##');
+  var fb3el = document.getElementById('et-fb3-##id##');
+  var anyFb = false;
+
+  [fb1el, fb2el, fb3el].forEach(function(item){
+    if(!item) return;
+    var emojiEl = item.querySelector('.et-feedback-emoji');
+    if(!emojiEl) return;
+    var clean = cleanFb(emojiEl);
+    if(clean){
+      emojiEl.textContent = clean;
+      anyFb = true;
+    } else {
+      item.style.display = 'none';
+    }
+  });
+
+  if(anyFb && fbSec) fbSec.classList.add('has-content');
+})();
+</script>
