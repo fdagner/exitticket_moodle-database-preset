@@ -2,10 +2,6 @@
 
 Exit Ticket is a preset for the Moodle activity database.
 
-## Demo
-
-https://fdagner.de/moodle/mod/data/view.php?d=9
-
 ## Getting started
 
 Download the source code and zip the files WITHOUT parent folder. Create a "Database" activity in Moodle and then upload the ZIP file in the "Presets" tab under "Import".
