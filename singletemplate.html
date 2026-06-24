@@ -102,8 +102,12 @@
     var sec = document.getElementById(id);
     if(!sec) return;
     var content = sec.querySelector('.et-section-content');
-    if(content && content.textContent.trim().length > 0){
-      sec.classList.add('has-content');
+    if(content){
+      var clone = content.cloneNode(true);
+      clone.querySelectorAll('*').forEach(function(n){
+        if(!n.innerHTML.trim()) n.remove();
+      });
+      if(clone.innerHTML.trim().length > 0) sec.classList.add('has-content');
     }
   });
 

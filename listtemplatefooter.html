@@ -13,7 +13,15 @@ function raw(el, sel){
   return s ? s.innerHTML.trim() : '';
 }
 function hasContent(el, sel){
-  return txt(el, sel).length > 0;
+  var s = el.querySelector(sel);
+  if(!s) return false;
+  /* Leere Moodle-Wrapper entfernen, Rest prüfen */
+  var clone = s.cloneNode(true);
+  /* Alle leeren Tags entfernen */
+  clone.querySelectorAll('*').forEach(function(n){
+    if(!n.innerHTML.trim()) n.remove();
+  });
+  return clone.innerHTML.trim().length > 0;
 }
 function cleanFb(el, sel){
   return txt(el, sel).replace(/^#\s*/, '').trim();
@@ -68,9 +76,9 @@ var FIELDS = [
    show:  true = im Modal anzeigen, false = komplett ausblenden
    ================================================================ */
 var FEEDBACK = [
-  { sel: '.et-f-fb1', label: 'Unterricht',      show: true},
-  { sel: '.et-f-fb2', label: 'Arbeitsverhalten', show: false },
-  { sel: '.et-f-fb3', label: 'Verstanden?',      show: false },
+  { sel: '.et-f-fb1', label: 'Unterricht',      show: true },
+  { sel: '.et-f-fb2', label: 'Arbeitsverhalten', show: true },
+  { sel: '.et-f-fb3', label: 'Verstanden?',      show: true },
 ];
 
 /* ================================================================
@@ -139,7 +147,7 @@ order.forEach(function(dateKey){
       var countNum   = countMatch ? parseInt(countMatch[1], 10) : 0;
       commentBadge =
         '<div class="et-comment-badge">' +
-          '<span class="et-comment-icon">💬</span>' +
+          '<span class="et-comment-icon">&#128172;</span>' +
           '<span class="et-comment-count">'+countNum+'</span>' +
         '</div>';
     }
@@ -184,17 +192,30 @@ order.forEach(function(dateKey){
     var modalSections = '';
 
     function sec(label, content){
-      var cleaned = content.replace(/<[^>]*>/g,'').trim();
-      if(!cleaned) return '';
+      var tmp = document.createElement('div');
+      tmp.innerHTML = content;
+      tmp.querySelectorAll('*').forEach(function(n){
+        if(!n.innerHTML.trim()) n.remove();
+      });
+      if(!tmp.innerHTML.trim()) return '';
       return '<div class="et-section has-content">' +
         (label ? '<div class="et-section-label">'+label+'</div>' : '') +
         '<div class="et-section-content">'+content+'</div>' +
       '</div>';
     }
 
+    function rawHasContent(html){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      tmp.querySelectorAll('*').forEach(function(n){
+        if(!n.innerHTML.trim()) n.remove();
+      });
+      return tmp.innerHTML.trim().length > 0;
+    }
+
     var g1 = raw(el,'.et-f-gelernt'), g2 = raw(el,'.et-f-gelernt2');
-    var gelernt = [g1,g2].filter(function(s){ return s.replace(/<[^>]*>/g,'').trim(); }).join('');
-    if(gelernt) modalSections += sec('Heute gelernt', gelernt);
+    var gelernt = [g1,g2].filter(rawHasContent).join('');
+    if(rawHasContent(gelernt)) modalSections += sec('Heute gelernt', gelernt);
 
     [
       ['.et-f-spickzettel', 'Spickzettel'],
